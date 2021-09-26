@@ -48,6 +48,11 @@ function registerCallbacks() {
     tree.setTriangles(e('triangles').checked);
     update();
   };
+  
+  e('connectLeaves').onchange = () => {
+    tree.setConnectLeaves(e('connectLeaves').checked);
+    update();
+  };
 
   e('nodecolor').onchange = () => {
     tree.setColor(e('nodecolor').checked);
