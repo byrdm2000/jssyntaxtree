@@ -14,6 +14,7 @@ export default class Tree {
     this.fontsize = 16;
     this.triangles = true;
     this.subscript = true;
+    this.connectLeaves = true;
     this.align_bottom = false;
     this.canvas = null;
     this.vscaler = 1;
@@ -63,8 +64,21 @@ export default class Tree {
     } else {
       this.canvas.setFillStyle('black');
     }
+    let offset = 2;
+    
+    if (drawable.is_leaf) {
+      if (this.connectLeaves) {  // leaf and connect leaves
+        offset = 2;
+      } else if (!drawable.label.includes(' ')) {  // leaf and not connect leaves and is only one word
+        offset = -16;
+      } else if (this.triangles) { // leaf and not connect leaves and is not only one word and triangles
+        offset = 2;
+      } else { // leaf and not connect leaves and is not only one word and not triangles
+        offset = -16;
+      }
+    }
     this.canvas.text(
-        drawable.label, getDrawableCenter(drawable), drawable.top + 2);
+        drawable.label, getDrawableCenter(drawable), drawable.top + offset);
   }
 
   drawSubscript(drawable) {
@@ -85,7 +99,7 @@ export default class Tree {
           getDrawableCenter(parent), parent.top + this.fontsize + 2,
           getDrawableCenter(child) + (text_width / 2) - 4, child.top - 3,
           getDrawableCenter(child) - (text_width / 2) + 4, child.top - 3);
-    } else {
+    } else if (!child.is_leaf || (child.is_leaf && this.connectLeaves)) {
       this.canvas.line(
           getDrawableCenter(parent), parent.top + this.fontsize + 2,
           getDrawableCenter(child), child.top - 3);
@@ -131,6 +145,10 @@ export default class Tree {
 
   setTriangles(t) {
     this.triangles = t;
+  }
+  
+  setConnectLeaves(c) {
+    this.connectLeaves = c;
   }
 
   setSubscript(s) {
