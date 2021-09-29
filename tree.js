@@ -90,7 +90,7 @@ export default class Tree {
       } else if (!drawable.label.includes(' ')) {  // leaf and not connect leaves and is only one word
         vertOffset = -18;
       } else if (this.triangles) { // leaf and not connect leaves and is not only one word and triangles
-        vertOffset = 1;
+        vertOffset = 0;
       } else { // leaf and not connect leaves and is not only one word and not triangles
         vertOffset = -18;
       }
