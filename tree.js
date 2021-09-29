@@ -65,7 +65,7 @@ export default class Tree {
       this.canvas.setFillStyle('black');
     }
     let offset = 2;
-    
+
     if (drawable.is_leaf) {
       if (this.connectLeaves) {  // leaf and connect leaves
         offset = 2;
@@ -83,12 +83,24 @@ export default class Tree {
 
   drawSubscript(drawable) {
     if (drawable.subscript == null || drawable.subscript == '') return;
+    let vertOffset = 0;
+    if (drawable.is_leaf) {
+      if (this.connectLeaves) {  // leaf and connect leaves
+        vertOffset = 0;
+      } else if (!drawable.label.includes(' ')) {  // leaf and not connect leaves and is only one word
+        vertOffset = -18;
+      } else if (this.triangles) { // leaf and not connect leaves and is not only one word and triangles
+        vertOffset = 1;
+      } else { // leaf and not connect leaves and is not only one word and not triangles
+        vertOffset = -18;
+      }
+    }
     let offset = 1 + getDrawableCenter(drawable) +
         this.canvas.textWidth(drawable.label) / 2;
     this.canvas.setFontSize(this.fontsize * 3 / 4);
     offset += this.canvas.textWidth(drawable.subscript) / 2;
     this.canvas.text(
-        drawable.subscript, offset, drawable.top + this.fontsize / 2);
+        drawable.subscript, offset, drawable.top + vertOffset + this.fontsize / 2);
     this.canvas.setFontSize(this.fontsize);  // Reset font
   }
 
@@ -146,7 +158,7 @@ export default class Tree {
   setTriangles(t) {
     this.triangles = t;
   }
-  
+
   setConnectLeaves(c) {
     this.connectLeaves = c;
   }
